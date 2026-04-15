@@ -184,10 +184,10 @@ function PayslipReceipt() {
 
 // ─── Slide-to-print button ──────────────────────────────────
 const TRACK_W  = 326
-const HANDLE_W = 40
+const HANDLE_W = 52   // 16px pad + 20px icon + 16px pad (matches Figma)
 const HANDLE_P = 2
-const MAX_DRAG = TRACK_W - HANDLE_W - HANDLE_P * 2  // 282
-const TRIGGER  = MAX_DRAG * 0.82                     // ~231
+const MAX_DRAG = TRACK_W - HANDLE_W - HANDLE_P * 2  // 270
+const TRIGGER  = MAX_DRAG * 0.82                     // ~221
 
 function SlideButton({ onComplete }: { onComplete: () => void }) {
   const [handleX, setHandleX]   = useState(0)
@@ -276,19 +276,23 @@ function SlideButton({ onComplete }: { onComplete: () => void }) {
         onPointerCancel={onUp}
         style={{
           position: 'absolute', top: HANDLE_P, left: HANDLE_P + handleX,
-          width: HANDLE_W, height: HANDLE_W, borderRadius: 24,
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.154) 6.67%, rgba(255,255,255,0) 103%), #171717',
-          boxShadow: '0 0 0 0.75px #171717, 0 5px 5px -2.5px rgba(51,51,51,0.08), 0 1px 3px -1.5px rgba(51,51,51,0.16), inset 0 1px 2px 0 rgba(255,255,255,0.16)',
+          width: HANDLE_W, height: 40,
+          borderRadius: 24, overflow: 'hidden',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.154) 6.67%, rgba(255,255,255,0) 103.33%), #171717',
+          boxShadow: '0 0 0 0.75px #171717, 0 16px 8px -8px rgba(51,51,51,0.01), 0 12px 6px -6px rgba(51,51,51,0.02), 0 5px 5px -2.5px rgba(51,51,51,0.08), 0 1px 3px -1.5px rgba(51,51,51,0.16)',
           cursor: triggered.current ? 'default' : 'grab',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '8px 16px', boxSizing: 'border-box',
           userSelect: 'none', touchAction: 'none',
           transition: dragging ? 'none' : 'left 0.35s cubic-bezier(.34,1.56,.64,1)',
         }}
       >
         {/* Double chevron >> */}
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}>
           <path d="M6 6.5l3.5 3.5L6 13.5M10.5 6.5l3.5 3.5-3.5 3.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
+        {/* Inset highlight */}
+        <div style={{ position: 'absolute', inset: 0, borderRadius: 24, boxShadow: 'inset 0 1px 2px 0 rgba(255,255,255,0.16)', pointerEvents: 'none' }} />
       </div>
     </div>
   )
@@ -408,21 +412,23 @@ export function PrinterAnimation() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.28 }}
-              style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}
+              style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 39 }}
             >
               {/* "Payment successfully" text */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, textAlign: 'center', width: '100%' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, textAlign: 'center', width: '100%' }}>
                 <h1 style={{
                   ...INTER, fontWeight: 600, fontSize: 40,
-                  lineHeight: 1.1, letterSpacing: '-0.2px',
-                  color: '#171717', margin: 0,
+                  lineHeight: 1, letterSpacing: '-0.2px',
+                  color: '#171717', margin: 0, textAlign: 'center',
+                  fontFeatureSettings: "'ss11' 1, 'calt' 0, 'liga' 0",
                 }}>
-                  Payment<br />successfully
+                  Payment successfully
                 </h1>
                 <p style={{
                   ...INTER, fontWeight: 400, fontSize: 16,
                   lineHeight: '25px', letterSpacing: '-0.096px',
-                  color: '#5c5c5c', margin: 0,
+                  color: '#5c5c5c', margin: 0, textAlign: 'center',
+                  fontFeatureSettings: "'calt' 0, 'liga' 0",
                 }}>
                   Your payment for Amina Okafor was successful,<br />now let's roll
                 </p>
