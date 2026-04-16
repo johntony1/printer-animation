@@ -52,7 +52,7 @@ const CONTENT_MT_IDLE = 300
 const CONTENT_MT_DONE = R_H - BODY_H + 24  // 423
 
 // ─── Colors ────────────────────────────────────────────────
-const PAGE_BG = '#EDEDF5'
+const PAGE_BG = '#ffffff'
 
 const SATOSHI: React.CSSProperties = { fontFamily: "'Satoshi', sans-serif" }
 const INTER:   React.CSSProperties = { fontFamily: "'Inter', sans-serif" }
