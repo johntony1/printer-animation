@@ -237,14 +237,13 @@ function SlideButton({ onComplete }: { onComplete: () => void }) {
         background: 'linear-gradient(180deg, rgba(255,255,255,0.154) 6.67%, rgba(255,255,255,0) 103%), rgb(247,247,247)',
         boxShadow: '0 0 0 0.3px #ebebeb, 0 1px 3px -1.5px rgba(51,51,51,0.16)',
       }}>
-        {/* Dark sweep fill */}
+        {/* Dark sweep fill — starts exactly at HANDLE_P so no sliver bleeds left of handle */}
         <div style={{
-          position: 'absolute', inset: 0,
+          position: 'absolute', top: 0, bottom: 0, left: HANDLE_P,
           background: '#171717',
           borderRadius: 24,
-          transformOrigin: 'left center',
-          transform: `scaleX(${(HANDLE_P + handleX + HANDLE_W) / TRACK_W})`,
-          transition: dragging ? 'none' : 'transform 0.35s cubic-bezier(.34,1.56,.64,1)',
+          width: handleX + HANDLE_W,
+          transition: dragging ? 'none' : 'width 0.35s cubic-bezier(.34,1.56,.64,1)',
         }} />
         {/* Faint chevron hints along the track */}
         {[70, 110, 150, 190, 230, 270].map((xp) => (
@@ -430,7 +429,7 @@ export function PrinterAnimation() {
                   color: '#5c5c5c', margin: 0, textAlign: 'center',
                   fontFeatureSettings: "'calt' 0, 'liga' 0",
                 }}>
-                  Your payment for Amina Okafor was successful,<br />now let's roll
+                  Your payment for Amina Okafor was successful, now let's roll
                 </p>
               </div>
               {/* Slide button */}
