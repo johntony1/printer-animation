@@ -376,6 +376,7 @@ export function PrinterAnimation() {
         <div ref={receiptRef} style={{
           position: 'absolute', top: R_TOP, left: R_LEFT,
           width: R_W, height: R_H, zIndex: 10,
+          filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.13)) drop-shadow(0 3px 8px rgba(0,0,0,0.07))',
         }}>
           <div style={{ width: R_INNER_W, height: R_INNER_H, transform: `scale(${R_SCALE})`, transformOrigin: 'top left' }}>
             <PayslipReceipt />
@@ -443,7 +444,8 @@ export function PrinterAnimation() {
                   lineHeight: 1, letterSpacing: '-0.2px',
                   color: '#171717', margin: 0, textAlign: 'center',
                   fontFeatureSettings: "'ss11' 1, 'calt' 0, 'liga' 0",
-                }}>
+                  textWrap: 'balance',
+                } as React.CSSProperties}>
                   Payment successfully
                 </h1>
                 <p style={{
