@@ -416,7 +416,7 @@ export function PrinterAnimation() {
               {/* "Payment successfully" text */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12, textAlign: 'center', width: '100%' }}>
                 <h1 style={{
-                  ...INTER, fontWeight: 600, fontSize: 40,
+                  ...INTER, fontWeight: 600, fontSize: 24,
                   lineHeight: 1, letterSpacing: '-0.2px',
                   color: '#171717', margin: 0, textAlign: 'center',
                   fontFeatureSettings: "'ss11' 1, 'calt' 0, 'liga' 0",
@@ -424,8 +424,8 @@ export function PrinterAnimation() {
                   Payment successfully
                 </h1>
                 <p style={{
-                  ...INTER, fontWeight: 400, fontSize: 16,
-                  lineHeight: '25px', letterSpacing: '-0.096px',
+                  ...INTER, fontWeight: 400, fontSize: 14,
+                  lineHeight: '22px', letterSpacing: '-0.084px',
                   color: '#5c5c5c', margin: 0, textAlign: 'center',
                   fontFeatureSettings: "'calt' 0, 'liga' 0",
                 }}>
