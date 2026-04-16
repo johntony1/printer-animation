@@ -473,16 +473,6 @@ export function PrinterAnimation() {
         </AnimatePresence>
       </motion.div>
 
-      {/* ── Credit ─────────────────────────────────────────── */}
-      <p style={{
-        ...SATOSHI, marginTop: 'auto', paddingTop: 40,
-        fontSize: 11, fontWeight: 500,
-        letterSpacing: '0.18em', textTransform: 'uppercase',
-        color: '#8899CC',
-      }}>
-        Precious Anizoba
-      </p>
-
     </div>
   )
 }
