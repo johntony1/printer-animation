@@ -48,7 +48,7 @@ const R_SCALE   = R_W / R_INNER_W             // ≈ 0.5034
 const RECEIPT_INIT_Y = -488
 
 // Content area margin-top in each phase (leaves room for receipt when out)
-const CONTENT_MT_IDLE = 40
+const CONTENT_MT_IDLE = 300
 const CONTENT_MT_DONE = R_H - BODY_H + 24  // 423
 
 // ─── Colors ────────────────────────────────────────────────
