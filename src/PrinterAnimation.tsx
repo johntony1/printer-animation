@@ -270,18 +270,19 @@ function SlideButton({ onComplete }: { onComplete: () => void }) {
         <div style={{ position: 'absolute', inset: 0, borderRadius: 24, boxShadow: 'inset 0 0 2px 1px rgba(255,255,255,0.16)', pointerEvents: 'none' }} />
       </div>
 
-      {/* Label — hidden once slid */}
-      <p style={{
-        position: 'absolute', inset: 0, margin: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        ...INTER, fontWeight: 500, fontSize: 14, letterSpacing: '-0.084px', lineHeight: '20px',
-        color: progress > 0.38 ? 'rgba(255,255,255,0.65)' : '#5c5c5c',
-        opacity: isSlid ? 0 : 1,
-        transition: 'color 0.15s, opacity 0.15s',
-        pointerEvents: 'none', whiteSpace: 'nowrap',
-      }}>
-        Slide To print pay slip
-      </p>
+      {/* Label — removed entirely once slid */}
+      {!isSlid && (
+        <p style={{
+          position: 'absolute', inset: 0, margin: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          ...INTER, fontWeight: 500, fontSize: 14, letterSpacing: '-0.084px', lineHeight: '20px',
+          color: progress > 0.38 ? 'rgba(255,255,255,0.65)' : '#5c5c5c',
+          transition: 'color 0.15s',
+          pointerEvents: 'none', whiteSpace: 'nowrap',
+        }}>
+          Slide To print pay slip
+        </p>
+      )}
 
       {/* ── Handle ─────────────────────────────────────────── */}
       <div
