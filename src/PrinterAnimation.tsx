@@ -337,7 +337,7 @@ export function PrinterAnimation() {
     <div style={{
       minHeight: '100vh',
       display: 'flex', flexDirection: 'column', alignItems: 'center',
-      paddingTop: 40, paddingBottom: 60,
+      paddingTop: 72, paddingBottom: 60,
       background: PAGE_BG,
     }}>
 
