@@ -242,7 +242,7 @@ function SlideButton({ onComplete }: { onComplete: () => void }) {
   const handleLeft  = isSlid ? HANDLE_P : HANDLE_P + handleX
   const handleWidth = isSlid ? SLID_W    : HANDLE_W
   const fillWidth   = isSlid ? SLID_W    : handleX + HANDLE_W
-  const EASE        = 'cubic-bezier(.34,1.56,.64,1)'
+  const EASE        = 'cubic-bezier(0.25, 0, 0.35, 1)'
 
   return (
     <div style={{ position: 'relative', width: TRACK_W, height: 44, flexShrink: 0 }}>
