@@ -184,14 +184,25 @@ function PayslipReceipt() {
 
 // ─── Slide-to-print button ──────────────────────────────────
 const TRACK_W  = 326
-const HANDLE_W = 52   // 16px pad + 20px icon + 16px pad (matches Figma)
+const HANDLE_W = 52   // 16px pad + 20px icon + 16px pad (rest state)
 const HANDLE_P = 2
+const SLID_W   = TRACK_W - HANDLE_P * 2  // 322 — full-width handle (slid state)
 const MAX_DRAG = TRACK_W - HANDLE_W - HANDLE_P * 2  // 270
 const TRIGGER  = MAX_DRAG * 0.82                     // ~221
+
+// Single >> chevron SVG used in both rest and slid states
+function ChevronIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}>
+      <path d="M6 6.5l3.5 3.5L6 13.5M10.5 6.5l3.5 3.5-3.5 3.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 
 function SlideButton({ onComplete }: { onComplete: () => void }) {
   const [handleX, setHandleX]   = useState(0)
   const [dragging, setDragging] = useState(false)
+  const [isSlid, setIsSlid]     = useState(false)
   const isDragging = useRef(false)
   const startPtr   = useRef(0)
   const startH     = useRef(0)
@@ -215,8 +226,8 @@ function SlideButton({ onComplete }: { onComplete: () => void }) {
       isDragging.current = false
       triggered.current  = true
       setDragging(false)
-      setHandleX(MAX_DRAG)
-      setTimeout(onComplete, 120)
+      setIsSlid(true)           // expand handle to full width
+      setTimeout(onComplete, 500) // wait for expand animation before printing
     }
   }
 
@@ -227,26 +238,30 @@ function SlideButton({ onComplete }: { onComplete: () => void }) {
     setHandleX(0) // spring back
   }
 
-  const progress = handleX / MAX_DRAG  // 0–1
+  const progress    = handleX / MAX_DRAG  // 0–1
+  const handleLeft  = isSlid ? HANDLE_P : HANDLE_P + handleX
+  const handleWidth = isSlid ? SLID_W    : HANDLE_W
+  const fillWidth   = isSlid ? SLID_W    : handleX + HANDLE_W
+  const EASE        = 'cubic-bezier(.34,1.56,.64,1)'
 
   return (
     <div style={{ position: 'relative', width: TRACK_W, height: 44, flexShrink: 0 }}>
-      {/* Track */}
+
+      {/* ── Track ──────────────────────────────────────────── */}
       <div style={{
         position: 'absolute', inset: 0, borderRadius: 24, overflow: 'hidden',
         background: 'linear-gradient(180deg, rgba(255,255,255,0.154) 6.67%, rgba(255,255,255,0) 103%), rgb(247,247,247)',
         boxShadow: '0 0 0 0.3px #ebebeb, 0 1px 3px -1.5px rgba(51,51,51,0.16)',
       }}>
-        {/* Dark sweep fill — starts exactly at HANDLE_P so no sliver bleeds left of handle */}
+        {/* Dark sweep fill */}
         <div style={{
           position: 'absolute', top: 0, bottom: 0, left: HANDLE_P,
-          background: '#171717',
-          borderRadius: 24,
-          width: handleX + HANDLE_W,
-          transition: dragging ? 'none' : 'width 0.35s cubic-bezier(.34,1.56,.64,1)',
+          background: '#171717', borderRadius: 24,
+          width: fillWidth,
+          transition: isSlid ? `width 0.42s ${EASE}` : dragging ? 'none' : `width 0.35s ${EASE}`,
         }} />
-        {/* Faint chevron hints along the track */}
-        {[70, 110, 150, 190, 230, 270].map((xp) => (
+        {/* Faint chevron hints visible as drag advances */}
+        {!isSlid && [70, 110, 150, 190, 230, 270].map((xp) => (
           <svg key={xp} style={{ position: 'absolute', left: xp, top: '50%', transform: 'translateY(-50%)', opacity: progress * MAX_DRAG > xp - 30 ? 0.35 : 0, transition: 'opacity 0.1s', pointerEvents: 'none' }} width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M4 2.5l3 3.5-3 3.5M7 2.5l3 3.5-3 3.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -255,44 +270,51 @@ function SlideButton({ onComplete }: { onComplete: () => void }) {
         <div style={{ position: 'absolute', inset: 0, borderRadius: 24, boxShadow: 'inset 0 0 2px 1px rgba(255,255,255,0.16)', pointerEvents: 'none' }} />
       </div>
 
-      {/* Label */}
+      {/* Label — hidden once slid */}
       <p style={{
         position: 'absolute', inset: 0, margin: 0,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         ...INTER, fontWeight: 500, fontSize: 14, letterSpacing: '-0.084px', lineHeight: '20px',
         color: progress > 0.38 ? 'rgba(255,255,255,0.65)' : '#5c5c5c',
-        transition: 'color 0.15s',
+        opacity: isSlid ? 0 : 1,
+        transition: 'color 0.15s, opacity 0.15s',
         pointerEvents: 'none', whiteSpace: 'nowrap',
       }}>
         Slide To print pay slip
       </p>
 
-      {/* Draggable handle */}
+      {/* ── Handle ─────────────────────────────────────────── */}
       <div
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
         onPointerCancel={onUp}
         style={{
-          position: 'absolute', top: HANDLE_P, left: HANDLE_P + handleX,
-          width: HANDLE_W, height: 40,
+          position: 'absolute', top: HANDLE_P,
+          left: handleLeft,
+          width: handleWidth,
+          height: 40,
           borderRadius: 24, overflow: 'hidden',
           background: 'linear-gradient(180deg, rgba(255,255,255,0.154) 6.67%, rgba(255,255,255,0) 103.33%), #171717',
           boxShadow: '0 0 0 0.75px #171717, 0 16px 8px -8px rgba(51,51,51,0.01), 0 12px 6px -6px rgba(51,51,51,0.02), 0 5px 5px -2.5px rgba(51,51,51,0.08), 0 1px 3px -1.5px rgba(51,51,51,0.16)',
           cursor: triggered.current ? 'default' : 'grab',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
+          gap: 16,
           padding: '8px 16px', boxSizing: 'border-box',
           userSelect: 'none', touchAction: 'none',
-          transition: dragging ? 'none' : 'left 0.35s cubic-bezier(.34,1.56,.64,1)',
+          transition: dragging ? 'none' : `left 0.42s ${EASE}, width 0.42s ${EASE}`,
         }}
       >
-        {/* Double chevron >> */}
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}>
-          <path d="M6 6.5l3.5 3.5L6 13.5M10.5 6.5l3.5 3.5-3.5 3.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        {isSlid
+          // Slid state: 8 chevron icons filling the handle (matches Figma 297207)
+          ? Array.from({ length: 8 }, (_, i) => <ChevronIcon key={i} />)
+          // Rest / dragging: single chevron
+          : <ChevronIcon />
+        }
         {/* Inset highlight */}
         <div style={{ position: 'absolute', inset: 0, borderRadius: 24, boxShadow: 'inset 0 1px 2px 0 rgba(255,255,255,0.16)', pointerEvents: 'none' }} />
       </div>
+
     </div>
   )
 }
