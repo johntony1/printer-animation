@@ -425,7 +425,7 @@ export function PrinterAnimation() {
                   fontFeatureSettings: "'ss11' 1, 'calt' 0, 'liga' 0",
                   textWrap: 'balance',
                 } as React.CSSProperties}>
-                  Payment successfully
+                  Payment successful
                 </h1>
                 <p style={{
                   ...INTER, fontWeight: 400, fontSize: 14,
