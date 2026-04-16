@@ -276,8 +276,8 @@ function SlideButton({ onComplete }: { onComplete: () => void }) {
           background: 'linear-gradient(180deg, rgba(255,255,255,0.154) 6.67%, rgba(255,255,255,0) 103.33%), #171717',
           boxShadow: '0 0 0 0.75px #171717, 0 16px 8px -8px rgba(51,51,51,0.01), 0 12px 6px -6px rgba(51,51,51,0.02), 0 5px 5px -2.5px rgba(51,51,51,0.08), 0 1px 3px -1.5px rgba(51,51,51,0.16)',
           cursor: triggered.current ? 'default' : 'grab',
-          // Left-aligned so icons are revealed left→right as handle grows
-          display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
+          // Left-aligned during drag (reveals icons progressively), centered when fully slid
+          display: 'flex', alignItems: 'center', justifyContent: isSlid ? 'center' : 'flex-start',
           padding: '8px 16px', gap: 16, boxSizing: 'border-box',
           userSelect: 'none', touchAction: 'none',
           transition: isSlid
